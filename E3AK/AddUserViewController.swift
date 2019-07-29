@@ -15,7 +15,7 @@ protocol AddUserViewControllerDelegate {
 }
 
 class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
-
+    
     var delegate: AddUserViewControllerDelegate?
     
     @IBOutlet weak var accountTitle: UILabel!
@@ -25,7 +25,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
     @IBOutlet weak var passwordTextField: UITextField!
     
     @IBOutlet weak var cardTitle: UILabel!
-   
+    
     
     @IBOutlet weak var CardInput1: UITextField!
     
@@ -58,7 +58,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
     var tmpCard:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         title = GetSimpleLocalizedString("Add Users")
         configUI()
         accountTitle.text = GetSimpleLocalizedString("ID")
@@ -68,17 +68,17 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
         cardTitle.text = GetSimpleLocalizedString("Card")
         Config.bleManager.setPeripheralDelegate(vc_delegate: self)
         accountTextField.tag = 0
-        accountTextField.addTarget(self, action: #selector(self.userAddTextFieldDidChange(field:)), for: UIControlEvents.editingChanged)
+        accountTextField.addTarget(self, action: #selector(self.userAddTextFieldDidChange(field:)), for: UIControl.Event.editingChanged)
         
         passwordTextField.tag = 1
-        passwordTextField.addTarget(self, action: #selector(self.userAddTextFieldDidChange(field:)), for: UIControlEvents.editingChanged)
+        passwordTextField.addTarget(self, action: #selector(self.userAddTextFieldDidChange(field:)), for: UIControl.Event.editingChanged)
         passwordTextField.keyboardType = .numberPad
         EditCardBG.isUserInteractionEnabled  = false
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         
         if Config.deviceType == Config.deviceType_Keypad{
             EditCardUI.isHidden = true
-             cardTitle.isHidden = true
+            cardTitle.isHidden = true
             EditCardBG.isHidden = true
         }
         
@@ -95,17 +95,17 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             CardInputs[i]?.keyboardType = .numberPad
             CardInputs[i]?.delegate = self
             CardInputs[i]?.tag = 200
-            CardInputs[i]?.addTarget(self, action: #selector(self.userAddTextFieldDidChange(field:)), for: UIControlEvents.editingChanged)
+            CardInputs[i]?.addTarget(self, action: #selector(self.userAddTextFieldDidChange(field:)), for: UIControl.Event.editingChanged)
             
         }
-//        CardInputs[0]?.becomeFirstResponder()
+        //        CardInputs[0]?.becomeFirstResponder()
         
         
         
-    
-    
+        
+        
     }
-
+    
     func configUI() {
         
         setNavigationBarRightItemWithTitle(title: self.GetSimpleLocalizedString("Add"))
@@ -144,17 +144,17 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
                     
                     Config.userListArr.append(["pw": tmpPassword, "name":tmpID,"card":tmpCard,"index":userIndex])
                     
-                   delegate?.didTapAdd()
+                    delegate?.didTapAdd()
                     
                 }
                 else{
-                   UsersViewController.result_userAction = 1
+                    UsersViewController.result_userAction = 1
                     
                 }
                 UsersViewController.status = userViewStatesCase.userAction.rawValue
                 dismiss(animated: true, completion: nil)
                 break
-
+                
                 
             default:
                 break
@@ -163,7 +163,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
         }
         
     }
-    func userAddTextFieldDidChange(field: UITextField){
+    @objc func userAddTextFieldDidChange(field: UITextField){
         var cardNum = 0
         let CardInputs = [ CardInput1,CardInput2,
                            CardInput3, CardInput4,
@@ -171,7 +171,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
                            CardInput7,CardInput8,
                            CardInput9, CardInput10]
         
-    
+        
         
         
         if field.tag == 0{// for user id
@@ -179,28 +179,136 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             if ( (field.text?.utf8.count)! > BPprotocol.userID_maxLen ){
                 field.deleteBackward();
             }
-       
-     
+            
+            
             
         }else if field.tag == 1{ // for user pwd
+            
+            field.text = field.text?.replacingOccurrences(of: "٠", with: "0", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "١", with: "1", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٢", with: "2", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٣", with: "3", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٤", with: "4", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٥", with: "5", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٦", with: "6", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٧", with: "7", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٨", with: "8", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "٩", with: "9", options: .literal, range: nil)
+            
+            field.text = field.text?.replacingOccurrences(of: "۰", with: "0", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۱", with: "1", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۲", with: "2", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۳", with: "3", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۴", with: "4", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۵", with: "5", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۶", with: "6", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۷", with: "7", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۸", with: "8", options: .literal, range: nil)
+            field.text = field.text?.replacingOccurrences(of: "۹", with: "9", options: .literal, range: nil)
+            
+            
+            
+            
             
             if ( (field.text?.utf8.count)! > BPprotocol.userPD_maxLen ) {
                 field.deleteBackward();
             }
-         
+            
+            
+            
+            
+            
         }else if field.tag == 200{ // for user card id
             
             
-            if ( (field.text?.characters.count)! > 1 ) {
+            if ( (field.text?.count)! > 1 ) {
                 
                 let start = field.text?.index(after:(field.text?.startIndex)! )
                 let end = field.text?.endIndex
-                let range = start..<end
-                field.text = field.text?.substring(with: range)
+//                let range = start..<end
+//                field.text = field.text?.substring(with: range)
+                field.text =  String((field.text?[start!..<end!])!)
+                
+                field.text = field.text?.replacingOccurrences(of: "٠", with: "0", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "١", with: "1", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٢", with: "2", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٣", with: "3", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٤", with: "4", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٥", with: "5", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٦", with: "6", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٧", with: "7", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٨", with: "8", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "٩", with: "9", options: .literal, range: nil)
+                
+                field.text = field.text?.replacingOccurrences(of: "۰", with: "0", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۱", with: "1", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۲", with: "2", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۳", with: "3", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۴", with: "4", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۵", with: "5", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۶", with: "6", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۷", with: "7", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۸", with: "8", options: .literal, range: nil)
+                field.text = field.text?.replacingOccurrences(of: "۹", with: "9", options: .literal, range: nil)
             }
             for i in 0 ... CardInputs.count - 1{
                 if CardInputs[i]?.text != " "{
-                    cardNum +=   (CardInputs[i]?.text?.characters.count)!
+                    
+                    //                    switch CardInputs[i]?.text {
+                    //                    case "٠"?:
+                    //                        CardInputs[i]?.text = "0"
+                    //                    case "١"?:
+                    //                        CardInputs[i]?.text = "1"
+                    //                    case "٢"?:
+                    //                        CardInputs[i]?.text = "2"
+                    //                    case "٣"?:
+                    //                        CardInputs[i]?.text = "3"
+                    //                    case "٤"?:
+                    //                        CardInputs[i]?.text = "4"
+                    //                    case "٥"?:
+                    //                        CardInputs[i]?.text = "5"
+                    //                    case "٦"?:
+                    //                        CardInputs[i]?.text = "6"
+                    //                    case "٧"?:
+                    //                        CardInputs[i]?.text = "7"
+                    //                    case "٨"?:
+                    //                        CardInputs[i]?.text = "8"
+                    //                    case "٩"?:
+                    //                        CardInputs[i]?.text = "9"
+                    //
+                    //
+                    //
+                    //
+                    //                    case "۰"?:
+                    //                        CardInputs[i]?.text = "0"
+                    //                    case "۱"?:
+                    //                        CardInputs[i]?.text = "1"
+                    //                    case "۲"?:
+                    //                        CardInputs[i]?.text = "2"
+                    //                    case "۳"?:
+                    //                        CardInputs[i]?.text = "3"
+                    //                    case "۴"?:
+                    //                        CardInputs[i]?.text = "4"
+                    //                    case "۵"?:
+                    //                        CardInputs[i]?.text = "5"
+                    //                    case "۶"?:
+                    //                        CardInputs[i]?.text = "6"
+                    //                    case "۷"?:
+                    //                        CardInputs[i]?.text = "7"
+                    //                    case "۸"?:
+                    //                        CardInputs[i]?.text = "8"
+                    //                    case "۹"?:
+                    //                        CardInputs[i]?.text = "9"
+                    //
+                    //
+                    //
+                    //                    default:
+                    //                        print("")
+                    //                    }
+                    
+                    
+                    
+                    cardNum +=   (CardInputs[i]?.text?.count)!
                     
                     if (CardInputs[i]?.text?.contains(" "))!{
                         cardNum -= 1
@@ -210,7 +318,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             }
             
             for i in 0 ... CardInputs.count - 1{
-                if (CardInputs[i]?.text?.characters.count==1 && (CardInputs[i]?.isEditing)! ){
+                if (CardInputs[i]?.text?.count==1 && (CardInputs[i]?.isEditing)! ){
                     
                     if(i < (CardInputs.count - 1)){
                         CardInputs[i+1]?.becomeFirstResponder()
@@ -240,15 +348,15 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
         
         
     }
-
-    func didTapLeftBarButtonItem() {
+    
+    @objc func didTapLeftBarButtonItem() {
         print("cancel")
         dismiss(animated: true, completion: nil)
     }
     
     override func didTapItem() {
         if !(accountTextField?.text?.isEmpty)! && !(passwordTextField?.text?.isEmpty)!{
-            guard (passwordTextField?.text?.characters.count)! > 3 && (passwordTextField?.text?.characters.count)! < BPprotocol.userPD_maxLen+1 else{
+            guard (passwordTextField?.text?.count)! > 3 && (passwordTextField?.text?.count)! < BPprotocol.userPD_maxLen+1 else{
                 
                 
                 self.showToastDialog(title: "", message: self.GetSimpleLocalizedString("users_manage_edit_status_Admin_pwd"))
@@ -270,7 +378,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
                 self.showToastDialog(title: "", message: self.GetSimpleLocalizedString("users_manage_edit_status_Admin_name"))
                 return
             }
-           
+            
             
             if pwArr.contains((passwordTextField.text)!){
                 self.showToastDialog(title: "", message: self.GetSimpleLocalizedString("users_manage_edit_status_duplication_password"))
@@ -295,14 +403,14 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
                 if CardInputs[i]?.text != " "{
                     newCard += (CardInputs[i]?.text)!
                     
-                    cardNum +=   (CardInputs[i]?.text?.characters.count)!
+                    cardNum +=   (CardInputs[i]?.text?.count)!
                     
                 }
             }
             if newCard == "" && cardNum == 0{
                 newCard = BPprotocol.spaceCardStr
             }
-        
+            
             print("cardNum = \(cardNum) newCard=\(newCard)")
             if (cardNum != 0) && (cardNum != 10 ){
                 
@@ -339,8 +447,8 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
                     self.showToastDialog(title: "", message: self.GetSimpleLocalizedString("users_manage_edit_status_duplication_card"))
                     return
                 }
-              tmpCard = newCard
-               
+                tmpCard = newCard
+                
             }else{
                 tmpCard = BPprotocol.spaceCardStr
             }
@@ -360,20 +468,20 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             if Config.deviceType != Config.deviceType_Keypad{
                 
                 
-            if  cardNum == 10{
-            let userCard:[UInt8] = Util.StringDecToUINT8(data: tmpCard, len: BPprotocol.userCardID_maxLen)
-            
-                cmdData = Config.bpProtocol.setUserAdd(Password: userPWD, ID: userID, card:userCard)
-            }else{
-                 let cardData:[UInt8] = [0xFF,0xFF,0xFF,0xFF]
+                if  cardNum == 10{
+                    let userCard:[UInt8] = Util.StringDecToUINT8(data: tmpCard, len: BPprotocol.userCardID_maxLen)
+                    
+                    cmdData = Config.bpProtocol.setUserAdd(Password: userPWD, ID: userID, card:userCard)
+                }else{
+                    let cardData:[UInt8] = [0xFF,0xFF,0xFF,0xFF]
+                    
+                    cmdData = Config.bpProtocol.setUserAdd(Password: userPWD, ID: userID, card:cardData)
+                }
                 
-                cmdData = Config.bpProtocol.setUserAdd(Password: userPWD, ID: userID, card:cardData)
-            }
-            
             }else{
                 
-               cmdData = Config.bpProtocol.setUserAdd(Password: userPWD, ID: userID)
-            
+                cmdData = Config.bpProtocol.setUserAdd(Password: userPWD, ID: userID)
+                
             }
             for i in 0 ... cmdData.count - 1 {
                 print("cmd add=%02x",cmdData[i])
@@ -382,7 +490,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             Config.bleManager.writeData(cmd: cmdData, characteristic: self.bpChar!)
             
         }
-       
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -410,7 +518,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             for i in 0 ... CardInputs.count - 1{
                 
                 
-                if(CardInputs[i]?.text?.characters.count==1 && (CardInputs[i]?.isEditing)! && (i != 0)){
+                if(CardInputs[i]?.text?.count==1 && (CardInputs[i]?.isEditing)! && (i != 0)){
                     CardInputs[i]?.text = " "
                     CardInputs[i-1]?.becomeFirstResponder()
                     
@@ -423,14 +531,14 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
             
             for i in 0 ... CardInputs.count - 1{
                 if CardInputs[i]?.text != " "{
-                    cardNum += (CardInputs[i]?.text?.characters.count)!
+                    cardNum += (CardInputs[i]?.text?.count)!
                 }
                 
             }
             if ((self.passwordTextField.text?.utf8.count)! >= 4) &&
                 ((self.accountTextField.text?.utf8.count)! >= 1 ){
                 
-               print("cardNum= \(cardNum)\r\n")
+                print("cardNum= \(cardNum)\r\n")
                 self.navigationItem.rightBarButtonItem?.isEnabled = (cardNum == 0 ) || (cardNum == BPprotocol.userCardID_maxLen )
                 
             }else{
@@ -446,6 +554,6 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
         return true
     }
     
-
+    
     
 }
