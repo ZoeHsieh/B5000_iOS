@@ -15,7 +15,7 @@ enum userViewStatesCase:Int {
     case userAction = 1
     
 }
-class UsersViewController: BLE_ViewController,UISearchBarDelegate {
+class UsersViewController: BLE_ViewController,UISearchBarDelegate,AddUserViewControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var downloadFrame: UIView!
@@ -155,12 +155,30 @@ class UsersViewController: BLE_ViewController,UISearchBarDelegate {
         UsersViewController.status = userViewStatesCase.userNone.rawValue
         
     }
+    
+    ///新增1223
+    func didTapAdd(result:Bool) {
+             
+              Config.bleManager.setCentralManagerDelegate(vc_delegate: self)
+              Config.bleManager.setPeripheralDelegate(vc_delegate: self)
+               localUserArr = Config.userListArr
+               tableView.reloadData()
+            //增加使用者體驗，新增後滑到最下
+            tableView.scrollToRow(at: IndexPath(row: localUserArr.count-1,section: 0), at: .bottom, animated: true)
+               
+    //           let cmdData = Config.bpProtocol.getUserCount()
+    //                Config.bleManager.writeData(cmd: cmdData, characteristic: bpChar)
+            
+           
+        }
+    ///新增1223
+    
     @IBAction func didTapAdd(_ sender: Any) {
         
         if Config.isUserListOK{
         let vc = AddUserViewController(nib: R.nib.addUserViewController)
             vc.bpChar =  self.bpChar
-            
+            vc.delegate = self ///1223
         let navVC: UINavigationController = UINavigationController(rootViewController: vc)
             present(navVC, animated: true, completion: nil)
         }else{

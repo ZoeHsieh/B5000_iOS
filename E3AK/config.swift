@@ -114,7 +114,7 @@ class Config{
     public static let isAutoTag = "isAutoTag"
 
     public static let firstOpen = "FirstOpen"
-    public static let CustomID = AdvertisingData.CUSTOM_IDs[UInt16(0x0001)] //只要找某客戶 ex:GEM
+    public static let CustomID = AdvertisingData.CUSTOM_IDs[UInt16(0x0001)] //只要找某客戶 ex:ROFU
     //public static let SCAN_TIME_INTRO:Int = 10
 
 }

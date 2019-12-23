@@ -12,21 +12,24 @@ import CoreBluetooth
 
 
 class BluetoothLEDevice{
-private final var debugFlag:Bool = true
-private static var centralManager:CBCentralManager!
-private static var peripheral:CBPeripheral?
     
-   public func Init(delegate:CBCentralManagerDelegate, UUID:CBUUID){
+    private final var debugFlag:Bool = true
+    private static var centralManager:CBCentralManager!
+    private static var peripheral:CBPeripheral?
+    
+    public func Init(delegate:CBCentralManagerDelegate, UUID:CBUUID){
         
     BluetoothLEDevice.centralManager = CBCentralManager(delegate: delegate, queue: nil, options: [CBCentralManagerOptionRestoreIdentifierKey : UUID])
     
     }
+    
     public func Init(delegate:CBCentralManagerDelegate){
         
         BluetoothLEDevice.centralManager = CBCentralManager(delegate: delegate, queue: nil, options: nil)
         
         
     }
+    
     public func release(){
         BluetoothLEDevice.centralManager.cancelPeripheralConnection(BluetoothLEDevice.peripheral!)
         
@@ -35,7 +38,7 @@ BluetoothLEDevice.peripheral = nil
         BluetoothLEDevice.centralManager = nil
     }
     
-  public func isBLEPowerON()->Bool{
+    public func isBLEPowerON()->Bool{
     
     
     return (BluetoothLEDevice.centralManager.state != .poweredOff)
@@ -46,7 +49,7 @@ BluetoothLEDevice.peripheral = nil
        return BluetoothLEDevice.centralManager.isScanning
     }
     
-  public func ScanBLE(){
+    public func ScanBLE(){
    
         if BluetoothLEDevice.centralManager.isScanning {
             if debugFlag{
@@ -67,6 +70,7 @@ BluetoothLEDevice.peripheral = nil
 
     
     }
+    
     public func ScanBLEStop(){
         
         if BluetoothLEDevice.centralManager.isScanning{
@@ -118,6 +122,7 @@ BluetoothLEDevice.peripheral = nil
 
     
     }
+    
     public func disconnectByCMD(char:CBCharacteristic){
         
         guard let peripheral = BluetoothLEDevice.peripheral  else {

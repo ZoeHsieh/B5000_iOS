@@ -40,6 +40,8 @@ class BPprotocol{
     public static let cmd_sensor_degree:UInt8 = 0x1C
     public static let cmd_set_admin_card:UInt8 = 0x1D
     public static let cmd_set_user_card:UInt8 = 0x1E
+    public static let cmd_read_card:UInt8      = 0x21;
+    
     //cmd data len define
     public static let len_user_enroll:Int = 30
     public static let len_user_identify:Int = 16
@@ -323,6 +325,7 @@ class BPprotocol{
         
         return Data(bytes: slipEncode(data: cmd, len: cmd.count))
     }
+    
     public func getAdminCard() -> Data{
         
         
@@ -330,6 +333,7 @@ class BPprotocol{
         
         return Data(bytes:slipEncode(data:cmd,len:cmd.count))
     }
+    
     public func setSensorDegree(Level:UInt8)-> Data{
         
         let cmd = getCmdWrite(cmdType: BPprotocol.cmd_sensor_degree, data:  [Level],datalen:  1)
@@ -382,6 +386,7 @@ class BPprotocol{
         
         return Data(bytes:slipEncode(data:cmd,len:cmd.count))
     }
+    
     public func setUserAdd(Password:[UInt8], ID:[UInt8], card:[UInt8]) -> Data{
         
         let cmdData:[UInt8] = Password + ID + card
@@ -445,8 +450,6 @@ class BPprotocol{
         
         return Data(bytes:slipEncode(data:cmd,len:cmd.count))
     }
-    
-    
     
     public func getUserBDAddr() -> Data{
         

@@ -11,12 +11,12 @@ import ChameleonFramework
 import CoreBluetooth
 
 protocol AddUserViewControllerDelegate {
-    func didTapAdd()
+    func didTapAdd(result:Bool)    ///1223
 }
 
 class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
     
-    var delegate: AddUserViewControllerDelegate?
+    public var delegate: AddUserViewControllerDelegate?
     
     @IBOutlet weak var accountTitle: UILabel!
     @IBOutlet weak var accountTextField: UITextField!
@@ -111,7 +111,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
         setNavigationBarRightItemWithTitle(title: self.GetSimpleLocalizedString("Add"))
         let leftBtn = UIButton(type: .custom)
         leftBtn.setTitle(self.GetSimpleLocalizedString("Cancel"), for: .normal)
-        leftBtn.setTitleColor(UIColor.flatGreen, for: .normal)
+        leftBtn.setTitleColor(UIColor.flatGreen(), for: .normal)
         leftBtn.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
         leftBtn.addTarget(self, action: #selector(didTapLeftBarButtonItem), for: .touchUpInside)
         let leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
@@ -144,7 +144,7 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
                     
                     Config.userListArr.append(["pw": tmpPassword, "name":tmpID,"card":tmpCard,"index":userIndex])
                     
-                    delegate?.didTapAdd()
+                    delegate?.didTapAdd(result: true)
                     
                 }
                 else{
