@@ -53,6 +53,10 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
     @IBOutlet weak var EditCardUI: UIStackView!
     
     @IBOutlet weak var EditCardBG: UITextField!
+    
+    @IBOutlet weak var lb_notice_card: UILabel!
+    
+    
     var tmpID:String = ""
     var tmpPassword:String = ""
     var tmpCard:String = ""
@@ -108,6 +112,9 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
     
     func configUI() {
         
+        lb_notice_card.text = self.GetSimpleLocalizedString("notice_for_card_in_user_add")
+        lb_notice_card.numberOfLines = 0
+        
         setNavigationBarRightItemWithTitle(title: self.GetSimpleLocalizedString("Add"))
         let leftBtn = UIButton(type: .custom)
         leftBtn.setTitle(self.GetSimpleLocalizedString("Cancel"), for: .normal)
@@ -133,6 +140,52 @@ class AddUserViewController: BLE_ViewController, UITextFieldDelegate{
         }
         if datalen == Int16(cmd.count - 4) {
             switch cmd[0]{
+                
+                /// read card 1224 ////////////////////////////////////////////////////////////
+                case BPprotocol.cmd_read_card:
+                         
+                var data = [UInt8]()
+                            
+                for i in 4 ... cmd.count - 1{
+                    data.append(cmd[i])
+                }
+                         
+                if(data.count == 4){
+                   var readCardValue = Util.UINT8toStringDecForCard(data: data, len: 4)
+                    if readCardValue.count != 10{ return }
+                            
+                            let CardInputs = [ CardInput1,CardInput2,
+                                                      CardInput3, CardInput4,
+                                                      CardInput5,CardInput6,
+                                                      CardInput7,CardInput8,
+                                                      CardInput9, CardInput10]
+                            let CardValue = readCardValue
+                            
+                            for i in 0 ... CardInputs.count - 1{
+                                 
+                                     
+                                     if CardValue != BPprotocol.spaceCardStr{
+                                         let start = CardValue.index(CardValue.startIndex, offsetBy: i)
+                                         let end = CardValue.index(CardValue.startIndex, offsetBy: i+1)
+                                         let range = start..<end
+                                         CardInputs[i]?.text = CardValue.substring(with: range)
+                                         
+                                       }else{
+                                         CardInputs[i]?.text = " "
+                                    
+                                     }
+                                     
+                                   
+                                CardInputs[i]?.endEditing(true)
+                            }
+                            
+                            readCardValue = ""
+                 ///1224
+                 userAddTextFieldDidChange(field: CardInputs[0]!)
+                }
+
+                break
+                /// read card 1224 ////////////////////////////////////////////////////////////
                 
             case BPprotocol.cmd_user_add:
                 UsersViewController.result_userAction = 0

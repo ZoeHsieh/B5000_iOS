@@ -76,6 +76,8 @@ class UserInfoTableViewController: BLE_tableViewController , UITextFieldDelegate
     var openTimes: Int!
     var weekly: UInt8!
     var displayAlerDialog:UIAlertController? = nil
+    /// read card 1224 ////////////////////////////////////////////////////////////
+    private var  readCardValue = ""
     // var newStartTimeArr = [Date().year, Date().month, Date().day, 0, 0, 0]
     // var newEndTimeArr = [Date().year + 1, Date().month, Date().day, 23, 50, 0]
     @IBAction func CardConfirmBtnListener(_ sender: Any) {
@@ -301,24 +303,89 @@ class UserInfoTableViewController: BLE_tableViewController , UITextFieldDelegate
             headerTitle.textLabel?.textColor = UIColor.black        }
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        switch section {
-        case 0:
-            return GetSimpleLocalizedString("ID")
-        case 1:
-            return GetSimpleLocalizedString("Password/PIN Code (4~8 Digits)")
-        case 2:
-            if(Config.deviceType != Config.deviceType_Keypad){
-                return GetSimpleLocalizedString("Card")
-            }else{
-                return ""
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//
+//        switch section {
+//        case 0:
+//            return GetSimpleLocalizedString("ID")
+//        case 1:
+//            return GetSimpleLocalizedString("Password/PIN Code (4~8 Digits)")
+//        case 2:
+//            if(Config.deviceType != Config.deviceType_Keypad){
+//                return GetSimpleLocalizedString("Card")
+//            }else{
+//                return ""
+//
+//            }
+//        default:
+//            return ""
+//        }
+//    }
+     
+     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+                let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 21))
+                titleLabel.font = UIFont.systemFont(ofSize: 14)
+                titleLabel.textColor = UIColor.black
+                titleLabel.adjustsFontSizeToFitWidth = false
+                titleLabel.numberOfLines = 0
+                titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
                 
-            }
-        default:
-            return ""
-        }
+                let note_titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
+                note_titleLabel.font = UIFont.systemFont(ofSize: 14)
+        //        note_titleLabel.backgroundColor = UIColor.green
+        //        note_titleLabel.textColor = UIColor.red
+                note_titleLabel.adjustsFontSizeToFitWidth = false
+                note_titleLabel.numberOfLines = 0
+                note_titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+                
+        //        titleLabel.constraints
+                
+                switch section {
+                case 0:
+                    titleLabel.text = GetSimpleLocalizedString("ID")
+                    headerView.addSubview(titleLabel)
+                case 1:
+                    titleLabel.text = GetSimpleLocalizedString("Password/PIN Code (4~8 Digits)")
+                    headerView.addSubview(titleLabel)
+                case 2:
+                    
+                        
+                        titleLabel.text = GetSimpleLocalizedString("notice_for_card_in_user_add")
+                        titleLabel.sizeToFit()
+                        titleLabel.numberOfLines = 0
+                        titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+                        headerView.addSubview(titleLabel)
+                        
+                        note_titleLabel.text = GetSimpleLocalizedString("Card")
+                        headerView.addSubview(note_titleLabel)
+                        
+                 
+                default:
+                    titleLabel.text = ""
+                    headerView.addSubview(titleLabel)
+                }
+                
+                
+                 
+                titleLabel.translatesAutoresizingMaskIntoConstraints = false
+                note_titleLabel.translatesAutoresizingMaskIntoConstraints = false
+                headerView.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: headerView, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 15))
+                headerView.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: headerView, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: -15.0))
+        //        headerView.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: headerView, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 0))
+                headerView.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: headerView, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: -5))
+                
+                if section == 2 {
+                    headerView.addConstraint(NSLayoutConstraint(item: note_titleLabel, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: headerView, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 15))
+                    headerView.addConstraint(NSLayoutConstraint(item: note_titleLabel, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: headerView, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: -15.0))
+                    
+                    headerView.addConstraint(NSLayoutConstraint(item: note_titleLabel, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: titleLabel, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 0))
+                }
+                
+                return headerView
+        //        return titleLabel
     }
+    
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         
@@ -538,6 +605,55 @@ class UserInfoTableViewController: BLE_tableViewController , UITextFieldDelegate
         if datalen == Int16(cmd.count - 4) {
             
             switch cmd[0] {
+                
+                ///read card 1224 ///////////////////////////////////////////////////
+                case BPprotocol.cmd_read_card:
+                         
+                var data = [UInt8]()
+                            
+                for i in 4 ... cmd.count - 1{
+                    data.append(cmd[i])
+                }
+                         
+                if(data.count == 4){
+                    readCardValue = Util.UINT8toStringDecForCard(data: data, len: 4)
+                    if readCardValue.count != 10{ return }
+                            
+                            let CardInputs = [ CardInput1,CardInput2,
+                                                      CardInput3, CardInput4,
+                                                      CardInput5,CardInput6,
+                                                      CardInput7,CardInput8,
+                                                      CardInput9, CardInput10]
+                            let CardValue = readCardValue
+                    
+                    
+                    
+                            
+                            for i in 0 ... CardInputs.count - 1{
+                                 
+                                     
+                                     if CardValue != BPprotocol.spaceCardStr{
+                                         let start = CardValue.index(CardValue.startIndex, offsetBy: i)
+                                         let end = CardValue.index(CardValue.startIndex, offsetBy: i+1)
+                                         let range = start..<end
+                                         CardInputs[i]?.text = CardValue.substring(with: range)
+                                         
+                                       }else{
+                                         CardInputs[i]?.text = " "
+                                    
+                                     }
+                                     
+                                   
+                                CardInputs[i]?.endEditing(true)
+                            }
+                            ///1223新增判斷
+                            
+                            CardEditChange(field: CardInputs[0]!)
+                            readCardValue = ""
+                }
+
+                break
+                ///read card 1224 ///////////////////////////////////////////////////
                 
             case BPprotocol.cmd_set_user_id:
                 
@@ -897,7 +1013,15 @@ class UserInfoTableViewController: BLE_tableViewController , UITextFieldDelegate
             CardInputs[i]?.addTarget(self, action: #selector(self.CardEditChange(field:)), for: UIControl.Event.editingChanged)
             
         }
-        CardInputs[0]?.becomeFirstResponder()
+        /// read card 1224 ////////////////////////////////////////////////////////
+        CardEditChange(field: CardInputs[0]!)
+        
+        if(CardValue == BPprotocol.spaceCardStr)
+        {
+            CardInputs[0]?.becomeFirstResponder()
+        }
+        /// read card 1224 ////////////////////////////////////////////////////////
+        
         
         
         
