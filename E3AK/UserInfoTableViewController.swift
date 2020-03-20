@@ -392,6 +392,8 @@ class UserInfoTableViewController: BLE_tableViewController , UITextFieldDelegate
         switch section {
         case 3:
             return UserInfoTableViewController.titleForFooter
+        case 1:
+            return " "
         default:
             return ""
         }

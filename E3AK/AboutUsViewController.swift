@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import MessageUI
+import SafariServices
 
-class AboutUsViewController: BLE_ViewController {
+class AboutUsViewController: BLE_ViewController,MFMailComposeViewControllerDelegate,SFSafariViewControllerDelegate {
 
     @IBOutlet weak var appversionButton: UIButton!
     
@@ -24,8 +26,8 @@ class AboutUsViewController: BLE_ViewController {
        
 
         title = GetSimpleLocalizedString("About Us")
-        DeviceModelTitle.text = GetSimpleLocalizedString("Device Model")
-        deviceModelName.text = " \nBC-5900B\nBKC-5000B\n "
+//        DeviceModelTitle.text = GetSimpleLocalizedString("Device Model")
+//        deviceModelName.text = " \nBC-5900B\nBKC-5000B\n "
         //DeviceModelTitle.text = deviceModelName
         let version : String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         //DeviceModelValue.text = "E3AK"//deviceModel
@@ -35,6 +37,38 @@ class AboutUsViewController: BLE_ViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func go_URL(_ sender: UIButton) {
+        goToURL()
+    }
+    
+    @IBAction func send_Mail(_ sender: UIButton) {
+        sendMail()
+    }
+    
+    
+    func goToURL() {
+            if let url = URL(string: "https://www.cdvi.ca/") {
+            let safari = SFSafariViewController(url: url)
+            safari.delegate = self
+            present(safari, animated: true, completion: nil)}
+        }
+    
+    func sendMail() {
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["linda@rofu.com"])
+            mail.setSubject("Send from ROFU APP")
+            mail.setMessageBody("", isHTML: true)
+            
+            present(mail, animated: true)
+        }
+        
+    }
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
     }
     
 
