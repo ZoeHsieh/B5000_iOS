@@ -9,14 +9,14 @@ import UIKit
 
 /// This `R` struct is generated and contains references to static resources.
 struct R: Rswift.Validatable {
-  fileprivate static let applicationLocale = hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current
+  fileprivate static let applicationLocale = hostingBundle.preferredLocalizations.first.flatMap { Locale(identifier: $0) } ?? Locale.current
   fileprivate static let hostingBundle = Bundle(for: R.Class.self)
 
   /// Find first language and bundle for which the table exists
   fileprivate static func localeBundle(tableName: String, preferredLanguages: [String]) -> (Foundation.Locale, Foundation.Bundle)? {
     // Filter preferredLanguages to localizations, use first locale
     var languages = preferredLanguages
-      .map(Locale.init)
+      .map { Locale(identifier: $0) }
       .prefix(1)
       .flatMap { locale -> [String] in
         if hostingBundle.localizations.contains(locale.identifier) {
@@ -258,7 +258,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 40 images.
+  /// This `R.image` struct is generated, and contains static references to 44 images.
   struct image {
     /// Image `Back Chevron`.
     static let backChevron = Rswift.ImageResource(bundle: R.hostingBundle, name: "Back Chevron")
@@ -304,8 +304,12 @@ struct R: Rswift.Validatable {
     static let loadingGreen = Rswift.ImageResource(bundle: R.hostingBundle, name: "loading-green")
     /// Image `loading-white`.
     static let loadingWhite = Rswift.ImageResource(bundle: R.hostingBundle, name: "loading-white")
+    /// Image `mail`.
+    static let mail = Rswift.ImageResource(bundle: R.hostingBundle, name: "mail")
     /// Image `plants`.
     static let plants = Rswift.ImageResource(bundle: R.hostingBundle, name: "plants")
+    /// Image `privacy`.
+    static let privacy = Rswift.ImageResource(bundle: R.hostingBundle, name: "privacy")
     /// Image `relogin`.
     static let relogin = Rswift.ImageResource(bundle: R.hostingBundle, name: "relogin")
     /// Image `research-green`.
@@ -340,6 +344,10 @@ struct R: Rswift.Validatable {
     static let user = Rswift.ImageResource(bundle: R.hostingBundle, name: "user")
     /// Image `users-list`.
     static let usersList = Rswift.ImageResource(bundle: R.hostingBundle, name: "users-list")
+    /// Image `ver`.
+    static let ver = Rswift.ImageResource(bundle: R.hostingBundle, name: "ver")
+    /// Image `web`.
+    static let web = Rswift.ImageResource(bundle: R.hostingBundle, name: "web")
 
     #if os(iOS) || os(tvOS)
     /// `UIImage(named: "Back Chevron", bundle: ..., traitCollection: ...)`
@@ -496,9 +504,23 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "mail", bundle: ..., traitCollection: ...)`
+    static func mail(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.mail, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "plants", bundle: ..., traitCollection: ...)`
     static func plants(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.plants, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "privacy", bundle: ..., traitCollection: ...)`
+    static func privacy(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.privacy, compatibleWith: traitCollection)
     }
     #endif
 
@@ -618,6 +640,20 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "users-list", bundle: ..., traitCollection: ...)`
     static func usersList(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.usersList, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "ver", bundle: ..., traitCollection: ...)`
+    static func ver(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.ver, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "web", bundle: ..., traitCollection: ...)`
+    static func web(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.web, compatibleWith: traitCollection)
     }
     #endif
 
@@ -6968,7 +7004,6 @@ struct _R: Rswift.Validatable {
         if UIKit.UIImage(named: "green-dot", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'green-dot' is used in storyboard 'Main', but couldn't be loaded.") }
         if UIKit.UIImage(named: "history", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'history' is used in storyboard 'Main', but couldn't be loaded.") }
         if UIKit.UIImage(named: "loading-white", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'loading-white' is used in storyboard 'Main', but couldn't be loaded.") }
-        if UIKit.UIImage(named: "plants", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'plants' is used in storyboard 'Main', but couldn't be loaded.") }
         if UIKit.UIImage(named: "relogin", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'relogin' is used in storyboard 'Main', but couldn't be loaded.") }
         if UIKit.UIImage(named: "revert", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'revert' is used in storyboard 'Main', but couldn't be loaded.") }
         if UIKit.UIImage(named: "setup", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'setup' is used in storyboard 'Main', but couldn't be loaded.") }

@@ -30,8 +30,10 @@ class AboutUsViewController: BLE_ViewController,MFMailComposeViewControllerDeleg
 //        deviceModelName.text = " \nBC-5900B\nBKC-5000B\n "
         //DeviceModelTitle.text = deviceModelName
         let version : String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+       // appversionButton.imageEdgeInsets = UIEdgeInsets.init(top: 10, left: 10, bottom: 10,right: 0)
         //DeviceModelValue.text = "E3AK"//deviceModel
         appversionButton.setTitle(GetSimpleLocalizedString("APP version") + version, for: .normal)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +51,7 @@ class AboutUsViewController: BLE_ViewController,MFMailComposeViewControllerDeleg
     
     
     func goToURL() {
-            if let url = URL(string: "https://www.cdvi.ca/") {
+            if let url = URL(string: "https://rofu.com/") {
             let safari = SFSafariViewController(url: url)
             safari.delegate = self
             present(safari, animated: true, completion: nil)}
@@ -60,7 +62,7 @@ class AboutUsViewController: BLE_ViewController,MFMailComposeViewControllerDeleg
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
             mail.setToRecipients(["linda@rofu.com"])
-            mail.setSubject("Send from ROFU APP")
+            mail.setSubject("Sent from ROFU APP")
             mail.setMessageBody("", isHTML: true)
             
             present(mail, animated: true)
